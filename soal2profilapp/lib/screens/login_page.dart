@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profile_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,6 +13,13 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  // true saat sedang proses login
+  bool _isLoading = false;
+
+  // akun yang dianggap benar (data contoh, tanpa server)
+  final String _emailBenar = 'rizal@gmail.com';
+  final String _passwordBenar = '123456';
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -19,8 +27,41 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _login() {
-    debugPrint('Sip, Tombol masuk udh bisa');
+  Future<void> _login() async {
+    // cek semua isian form, kalau ada yang salah berhenti di sini
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    // tampilkan loading
+    setState(() {
+      _isLoading = true;
+    });
+
+    // pura-pura proses login selama 2 detik
+    await Future.delayed(const Duration(seconds: 2));
+
+    // kalau halaman sudah ditutup, jangan lanjut
+    if (!mounted) return;
+
+    // cek apakah email dan password cocok dengan akun yang benar
+    if (_emailController.text != _emailBenar ||
+        _passwordController.text != _passwordBenar) {
+      // login gagal: hentikan loading dan tampilkan pesan error
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login gagal: email atau password salah')),
+      );
+      return;
+    }
+
+    // pindah ke halaman profil, halaman login diganti (tidak bisa kembali)
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const ProfilePage()),
+    );
   }
 
   @override
@@ -49,6 +90,15 @@ class _LoginPageState extends State<LoginPage> {
                     prefixIcon: Icon(Icons.email),
                     border: OutlineInputBorder(),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Email tidak boleh kosong';
+                    }
+                    if (!value.contains('@') || !value.contains('.')) {
+                      return 'Format email tidak valid';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -59,14 +109,37 @@ class _LoginPageState extends State<LoginPage> {
                     prefixIcon: Icon(Icons.lock),
                     border: OutlineInputBorder(),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Password tidak boleh kosong';
+                    }
+                    if (value.length < 6) {
+                      return 'Password minimal 6 karakter';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
+                  height: 48,
                   child: ElevatedButton(
-                    onPressed: _login,
-                    child: const Text('Masuk'),
+                    // tombol dimatikan saat loading
+                    onPressed: _isLoading ? null : _login,
+                    child: _isLoading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('Masuk'),
                   ),
+                ),
+                const SizedBox(height: 12),
+                // petunjuk akun untuk demo
+                const Text(
+                  'Akun demo: rizal@gmail.com / 123456',
+                  style: TextStyle(color: Colors.grey),
                 ),
               ],
             ),
