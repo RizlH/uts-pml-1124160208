@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/profile.dart';
 import '../widgets/info_tile.dart';
+import 'edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,6 +11,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  // data profil awal (ganti dengan data kamu sendiri)
   Profile profile = Profile(
     nama: 'Rizal Hermawan',
     nim: '1124160208',
@@ -20,6 +22,16 @@ class _ProfilePageState extends State<ProfilePage> {
     noHp: '085783770890',
     github: 'RizlH',
   );
+
+  // pindah ke halaman edit
+  void _bukaEditProfil() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfilePage(profile: profile),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +66,12 @@ class _ProfilePageState extends State<ProfilePage> {
             InfoTile(icon: Icons.email, judul: 'Email', isi: profile.email),
             InfoTile(icon: Icons.phone, judul: 'No. HP', isi: profile.noHp),
             InfoTile(icon: Icons.code, judul: 'GitHub', isi: profile.github),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: _bukaEditProfil,
+              icon: const Icon(Icons.edit),
+              label: const Text('Edit Profil'),
+            ),
           ],
         ),
       ),
