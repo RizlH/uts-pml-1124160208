@@ -51,8 +51,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _simpan() {
-    // nanti diisi validasi dan kirim data kembali
-    debugPrint('Tombol simpan ditekan');
+    // cek validasi dulu
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    // buat objek Profile baru dari isi form
+    final dataBaru = Profile(
+      nama: _namaController.text,
+      nim: _nimController.text,
+      prodi: _prodiController.text,
+      kelas: _kelasController.text,
+      bio: _bioController.text,
+      email: _emailController.text,
+      noHp: _noHpController.text,
+      github: _githubController.text,
+    );
+
+    // kembali ke halaman Profil sambil membawa data baru
+    Navigator.pop(context, dataBaru);
   }
 
   @override
@@ -71,6 +88,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   labelText: 'Nama Lengkap',
                   border: OutlineInputBorder(),
                 ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Nama tidak boleh kosong';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 12),
               TextFormField(
@@ -113,6 +136,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Email tidak boleh kosong';
+                  }
+                  if (!value.contains('@') || !value.contains('.')) {
+                    return 'Format email tidak valid';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 12),
               TextFormField(
@@ -122,6 +154,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   labelText: 'No. HP',
                   border: OutlineInputBorder(),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'No. HP tidak boleh kosong';
+                  }
+                  // hanya angka, panjang 10 sampai 13 digit
+                  final hanyaAngka = RegExp(r'^[0-9]{10,13}$');
+                  if (!hanyaAngka.hasMatch(value)) {
+                    return 'No. HP harus angka 10-13 digit';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 12),
               TextFormField(

@@ -24,13 +24,21 @@ class _ProfilePageState extends State<ProfilePage> {
   );
 
   // pindah ke halaman edit
-  void _bukaEditProfil() {
-    Navigator.push(
+  Future<void> _bukaEditProfil() async {
+    // tunggu hasil dari halaman edit (data baru)
+    final hasil = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => EditProfilePage(profile: profile),
       ),
     );
+
+    // kalau ada data baru, simpan dan tampilkan ulang dengan setState
+    if (hasil != null) {
+      setState(() {
+        profile = hasil as Profile;
+      });
+    }
   }
 
   @override
