@@ -80,6 +80,14 @@ class _ProfilePageState extends State<ProfilePage> {
               icon: const Icon(Icons.edit),
               label: const Text('Edit Profil'),
             ),
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: () {
+                Navigator.pushNamed(context, '/about');
+              },
+              icon: const Icon(Icons.info),
+              label: const Text('Tentang Saya'),
+            ),
           ],
         ),
       ),
