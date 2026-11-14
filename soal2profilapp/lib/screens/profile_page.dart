@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 import '../models/profile.dart';
 import '../widgets/info_tile.dart';
 import 'edit_profile_page.dart';
@@ -41,10 +42,31 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  // true kalau sekarang sedang mode gelap
+  bool get _isDark => temaNotifier.value == ThemeMode.dark;
+
+  // ganti tema terang <-> gelap
+  void _gantiTema(bool gelap) {
+    setState(() {
+      temaNotifier.value = gelap ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Profil')),
+      appBar: AppBar(
+        title: const Text('Profil'),
+        actions: [
+          // tombol ikon untuk ganti tema
+          IconButton(
+            icon: Icon(_isDark ? Icons.light_mode : Icons.dark_mode),
+            onPressed: () {
+              _gantiTema(!_isDark);
+            },
+          ),
+        ],
+      ),
 
       // menu samping (geser dari kiri atau tekan ikon garis tiga)
       drawer: Drawer(
@@ -83,6 +105,15 @@ class _ProfilePageState extends State<ProfilePage> {
               onTap: () {
                 Navigator.pop(context); // tutup drawer
                 Navigator.pushNamed(context, '/about');
+              },
+            ),
+            // switch mode gelap
+            SwitchListTile(
+              secondary: const Icon(Icons.dark_mode),
+              title: const Text('Mode Gelap'),
+              value: _isDark,
+              onChanged: (nilai) {
+                _gantiTema(nilai);
               },
             ),
             ListTile(
