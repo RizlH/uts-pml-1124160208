@@ -8,7 +8,7 @@
 
 ## Link Video YouTube
 
-blm
+https://youtu.be/6k_9hjMB5tM?si=DXAPzeCPkWdYWDJa
 
 ## Screenshot
 
