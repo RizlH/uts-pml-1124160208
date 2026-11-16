@@ -19,7 +19,7 @@ class AboutPage extends StatelessWidget {
           InfoTile(icon: Icons.garage, judul: 'Keahlian:', isi: "Mekanik Mobil"),
           InfoTile(icon: Icons.monitor, judul: 'Keahlian:', isi: "Frontend"),
           InfoTile(icon: Icons.gamepad, judul: 'Hobi:', isi: "Bermain Game"),
-          InfoTile(icon: Icons.movie, judul: 'Email', isi: "Menonton Film"),
+          InfoTile(icon: Icons.movie, judul: 'Hobi:', isi: "Menonton Film"),
           const SizedBox(height: 16),
           Text(
             'Riwayat Pendidikan',
